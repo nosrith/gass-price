@@ -3,24 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="ガソリン価格分布">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nosrith.github.io/gass-price/">
+  <meta property="og:image" content="https://nosrith.github.io/gass-price/thumb.png">
+  <meta property="og:description" content="ガソリン価格分布マップ">
+  <meta name="twitter:card" content="summary_large_image">
   <title>ガソリン価格分布</title>
   <script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'></script>
   <link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' />
   <style>
     html, body { width: 100%; height: 100%; margin: 0; }
-    body { display: flex; flex-direction: column }
+    body { display: flex; flex-direction: column; font-size: small }
     #map { flex: 1 1 0 }
     #title { position: absolute; left: .5rem; top: .5rem; font-size: large }
     #legend { position: absolute; left: .5rem; top: 2.5rem; border: solid 1px gray; padding: .5rem; background: #ffffff }
     #legend .row { margin: 0; height: 1rem }
-    #legend .color { display: inline-block; width: 1rem; height: 1rem }
-    #legend .label { display: inline-block; width: 3rem; text-align: right; font-size: small }
+    #legend .color { display: inline-block; width: 1rem; height: 1rem; vertical-align: middle }
+    #legend .label { display: inline-block; width: 3rem; text-align: right; vertical-align: middle }
   </style>
 </head>
 <body>
   <div id='map'></div>
   <div id='title'>ガソリン価格分布</div>
   <div id='legend'>
+    <div>平均価格との相対差</div>
     <div class='row'><span class='color' style='background: #E4007F'></span><span class='label'>+15%</span></div>
     <div class='row'><span class='color' style='background: #E5004F'></span><span class='label'></span></div>
     <div class='row'><span class='color' style='background: #E60012'></span><span class='label'>+10%</span></div>
