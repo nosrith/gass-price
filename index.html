@@ -43,6 +43,8 @@
       minZoom: 4,
       maxZoom: 12,
     });
+    map.dragRotate.disable();
+    map.touchZoomRotate.disableRotation();
     map.on('load', () => {
       const gridSpecs = [
         { z: 0, minzoom: 0, maxzoom: 6 },
