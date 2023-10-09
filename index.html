@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>ガソリン価格分布</title>
+  <script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'></script>
+  <link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' />
+  <style>
+    html, body { width: 100%; height: 100%; margin: 0; }
+    body { display: flex; flex-direction: column }
+    #map { flex: 1 1 0 }
+    #title { position: absolute; left: .5rem; top: .5rem; font-size: large }
+    #legend { position: absolute; left: .5rem; top: 2.5rem; border: solid 1px gray; padding: .5rem; background: #ffffff }
+    #legend .row { margin: 0; height: 1rem }
+    #legend .color { display: inline-block; width: 1rem; height: 1rem }
+    #legend .label { display: inline-block; width: 3rem; text-align: right; font-size: small }
+  </style>
+</head>
+<body>
+  <div id='map'></div>
+  <div id='title'>ガソリン価格分布</div>
+  <div id='legend'>
+    <div class='row'><span class='color' style='background: #E4007F'></span><span class='label'>+15%</span></div>
+    <div class='row'><span class='color' style='background: #E5004F'></span><span class='label'></span></div>
+    <div class='row'><span class='color' style='background: #E60012'></span><span class='label'>+10%</span></div>
+    <div class='row'><span class='color' style='background: #F39800'></span><span class='label'></span></div>
+    <div class='row'><span class='color' style='background: #FFF100'></span><span class='label'>+5%</span></div>
+    <div class='row'><span class='color' style='background: #8FC31F'></span><span class='label'></span></div>
+    <div class='row'><span class='color' style='background: #009944'></span><span class='label'>0%</span></div>
+    <div class='row'><span class='color' style='background: #009E96'></span><span class='label'></span></div>
+    <div class='row'><span class='color' style='background: #00A0E9'></span><span class='label'>-5%</span></div>
+    <div class='row'><span class='color' style='background: #0068B7'></span><span class='label'></span></div>
+    <div class='row'><span class='color' style='background: #1D2088'></span><span class='label'>-10%</span></div>
+  </div>
+  </div>
+  <script>
+    var map = new maplibregl.Map({
+      container: 'map',
+      style: 'https://gsi-cyberjapan.github.io/gsivectortile-mapbox-gl-js/blank.json', // stylesheet location
+      center: [136, 36.5], // starting position [lng, lat]
+      zoom: 5, // starting zoom
+      minZoom: 4,
+      maxZoom: 12,
+    });
+    map.on('load', () => {
+      const gridSpecs = [
+        { z: 0, minzoom: 0, maxzoom: 6 },
+        { z: 6, minzoom: 6, maxzoom: 8 },
+        { z: 8, minzoom: 8, maxzoom: 10 },
+        { z: 10, minzoom: 10, maxzoom: 22 },
+      ];
+      for (const gridSpec of gridSpecs) {
+        map.addSource(`gass_price_grid_${gridSpec.z}`, {
+          type: 'geojson',
+          data: `./gass_price_grid_${gridSpec.z}.geojson`,
+        });
+        map.addLayer({
+          'id': `gass_price_grid_${gridSpec.z}`,
+          'type': 'fill',
+          'source': `gass_price_grid_${gridSpec.z}`,
+          'minzoom': gridSpec.minzoom,
+          'maxzoom': gridSpec.maxzoom,
+          'layout': {},
+          'paint': {
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              ['get', 'med'],
+              -10, '#1D2088',
+              -7.5, '#0068B7',
+              -5, '#00A0E9',
+              -2.5, '#009E96',
+              0, '#009944',
+              2.5, '#8FC31F',
+              5, '#FFF100',
+              7.5, '#F39800',
+              10, '#E60012',
+              12.5, '#E5004F',
+              15, '#E4007F',
+            ],
+            'fill-opacity': 0.5
+          }
+        });
+      }
+    });
+  </script>  
+</body>
+</html>
